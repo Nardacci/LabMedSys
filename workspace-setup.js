@@ -81,18 +81,18 @@
 
   async function loadExistingWorkspace() {
     const client = getClient();
-    const {data:workspace,error:workspaceError}=await client.from('workspaces').select('id,name').eq('id',workspaceId).single();
-    if(workspaceError) throw workspaceError;
-    const {data:settings,error:settingsError}=await client.from('workspace_settings').select('company_legal_name,company_trade_name,country,timezone,locale,date_format,time_format').eq('workspace_id',workspaceId).single();
-    if(settingsError) throw settingsError;
-    data.workspaceName=workspace?.name||'';
-    data.companyLegalName=settings?.company_legal_name||'';
-    data.companyTradeName=settings?.company_trade_name||'';
-    data.country=settings?.country||'Brazil';
-    data.timezone=settings?.timezone||'America/Sao_Paulo';
-    data.locale=settings?.locale||'pt-BR';
-    data.dateFormat=settings?.date_format||'DD/MM/YYYY';
-    data.timeFormat=settings?.time_format||'24h';
+    const {data:setup,error}=await client.rpc('get_current_workspace_setup');
+    if(error) throw error;
+    if(!setup) throw new Error('Workspace configuration could not be found.');
+    workspaceId=setup.workspace_id;
+    data.workspaceName=setup.workspace_name||'';
+    data.companyLegalName=setup.company_legal_name||'';
+    data.companyTradeName=setup.company_trade_name||'';
+    data.country=setup.country||'Brazil';
+    data.timezone=setup.timezone||'America/Sao_Paulo';
+    data.locale=setup.locale||'pt-BR';
+    data.dateFormat=setup.date_format||'DD/MM/YYYY';
+    data.timeFormat=setup.time_format||'24h';
   }
 
   async function createWorkspace() {
@@ -149,7 +149,5 @@
     }catch(error){console.error('Workspace setup initialization failed:',error);setMessage(error?.message||'Unable to load workspace setup. Please refresh and try again.');}
   }
 
-  $('next-btn').addEventListener('click',next);
-  $('back-btn').addEventListener('click',back);
-  document.addEventListener('DOMContentLoaded',init);
+  document.addEventListener('DOMContentLoaded',()=>{ $('next-btn').addEventListener('click',next); $('back-btn').addEventListener('click',back); init(); });
 })();
