@@ -1,167 +1,46 @@
 (() => {
   'use strict';
-
   const steps = [
     { name: 'Welcome', kicker: 'STEP 1 · WELCOME', title: "Let's get started.", description: 'A few essentials are all we need to create your workspace.' },
     { name: 'Workspace', kicker: 'STEP 2 · WORKSPACE', title: 'Name your workspace.', description: 'This is the environment where your LabMedSys operation will live.' },
     { name: 'Company', kicker: 'STEP 3 · COMPANY', title: 'Tell us about the company.', description: 'Only the minimum information is needed to establish your workspace.' },
     { name: 'Location', kicker: 'STEP 4 · LOCATION & PREFERENCES', title: 'Set your regional preferences.', description: 'These defaults can be refined later for this workspace.' },
-    { name: 'Review', kicker: 'STEP 5 · REVIEW & CONFIRM', title: 'Review your configuration.', description: 'Everything looks good? Confirm the essentials before saving.' },
-    { name: 'Ready', kicker: 'STEP 6 · READY', title: 'You’re ready to go.', description: 'Your LabMedSys workspace is now configured.' }
+    { name: 'Review', kicker: 'STEP 5 · REVIEW & CONFIRM', title: 'Review your configuration.', description: 'Everything looks good? Confirm the essentials before saving.' }
   ];
-
-  let current = 0;
-  let workspaceId = null;
+  let current = 0, workspaceId = null;
   const revisit = new URLSearchParams(window.location.search).get('revisit') === '1';
-  const data = {
-    workspaceName: '', companyLegalName: '', companyTradeName: '',
-    country: 'Brazil', timezone: 'America/Sao_Paulo', locale: 'pt-BR',
-    dateFormat: 'DD/MM/YYYY', timeFormat: '24h'
-  };
-
-  const $ = (id) => document.getElementById(id);
-  const escapeHtml = (value) => String(value ?? '').replace(/[&<>'\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-
-  function setMessage(text, type = '') {
-    const el = $('setup-message');
-    if (!el) return;
-    el.textContent = text || '';
-    el.className = 'setup-message' + (type ? ' ' + type : '');
+  const data = { workspaceName:'', companyLegalName:'', companyTradeName:'', country:'Brazil', timezone:'America/Sao_Paulo', locale:'pt-BR', dateFormat:'DD/MM/YYYY', timeFormat:'24h' };
+  const $ = id => document.getElementById(id);
+  const escapeHtml = value => String(value ?? '').replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  function setMessage(text,type=''){const el=$('setup-message');if(!el)return;el.textContent=text||'';el.className='setup-message'+(type?' '+type:'');}
+  function input(id,label,value,placeholder,hint=''){return `<div class="setup-field"><label for="${id}">${label}</label><input id="${id}" value="${escapeHtml(value)}" placeholder="${escapeHtml(placeholder)}" required>${hint?`<small>${hint}</small>`:''}</div>`;}
+  function render(){
+    const step=steps[current];
+    $('setup-count-number').textContent=current+1;
+    $('setup-progress-bar').style.width=`${((current+1)/steps.length)*100}%`;
+    $('setup-step-label').textContent=step.kicker;$('setup-step-title').textContent=step.title;$('setup-step-description').textContent=step.description;
+    $('setup-step-icon').textContent=String(current+1).padStart(2,'0');
+    $('back-btn').style.visibility=current===0?'hidden':'visible';
+    $('next-btn').textContent=current===steps.length-1?(revisit?'Save Changes →':'Save & Continue →'):'Continue →';
+    $('save-btn').hidden=true;setMessage('');
+    document.querySelectorAll('.setup-progress-steps span').forEach((el,i)=>{el.classList.toggle('active',i===current);el.classList.toggle('completed',i<current);});
+    let html='';
+    if(current===0)html=`<div class="setup-welcome"><div class="setup-points"><div class="setup-point"><b>01</b><div><b>Workspace identity</b><br><span>Define the environment your team will work in.</span></div></div><div class="setup-point"><b>02</b><div><b>Company foundation</b><br><span>Tell us the minimum legal identity needed to start.</span></div></div><div class="setup-point"><b>03</b><div><b>Preferences</b><br><span>Set language, timezone and regional formats.</span></div></div></div></div>`;
+    if(current===1)html=`<div class="setup-form">${input('workspace-name','Workspace name',data.workspaceName,'e.g. Nardacci Pharma','Choose a clear name for this working environment.')}</div>`;
+    if(current===2)html=`<div class="setup-form">${input('company-legal-name','Legal name',data.companyLegalName,'e.g. Nardacci Indústria Farmacêutica Ltda.','Required to establish the workspace foundation.')}${input('company-trade-name','Trade name',data.companyTradeName,'e.g. Nardacci Pharma','Optional.')}</div>`;
+    if(current===3)html=`<div class="setup-form"><div class="setup-grid-2"><div class="setup-field"><label for="country">Country</label><select id="country"><option value="Brazil">Brazil</option><option value="Germany">Germany</option><option value="Italy">Italy</option><option value="United States">United States</option><option value="Portugal">Portugal</option></select></div><div class="setup-field"><label for="locale">Language</label><select id="locale"><option value="pt-BR">Português (Brasil)</option><option value="en-US">English (US)</option><option value="de-DE">Deutsch</option><option value="it-IT">Italiano</option></select></div></div><div class="setup-grid-2"><div class="setup-field"><label for="timezone">Timezone</label><select id="timezone"><option value="America/Sao_Paulo">São Paulo (UTC−03:00)</option><option value="Europe/Berlin">Berlin (UTC+01:00/+02:00)</option><option value="Europe/Rome">Rome (UTC+01:00/+02:00)</option><option value="America/New_York">New York (UTC−05:00/−04:00)</option></select></div><div class="setup-field"><label for="time-format">Time format</label><select id="time-format"><option value="24h">24-hour</option><option value="12h">12-hour</option></select></div></div><div class="setup-field"><label for="date-format">Date format</label><select id="date-format"><option value="DD/MM/YYYY">DD/MM/YYYY</option><option value="MM/DD/YYYY">MM/DD/YYYY</option><option value="YYYY-MM-DD">YYYY-MM-DD</option></select></div></div>`;
+    if(current===4)html=`<div class="setup-review"><button type="button" class="review-row" data-edit="1"><span><strong>Workspace</strong><b>${escapeHtml(data.workspaceName)}</b></span><em>Edit</em></button><button type="button" class="review-row" data-edit="2"><span><strong>Company</strong><b>${escapeHtml(data.companyLegalName)}${data.companyTradeName?' · '+escapeHtml(data.companyTradeName):''}</b></span><em>Edit</em></button><button type="button" class="review-row" data-edit="3"><span><strong>Location & Preferences</strong><b>${escapeHtml(data.country)} · ${escapeHtml(data.locale)} · ${escapeHtml(data.timezone)} · ${escapeHtml(data.dateFormat)} · ${escapeHtml(data.timeFormat)}</b></span><em>Edit</em></button><div class="review-note">✓ After confirmation, these settings become the operating foundation of your workspace.</div></div>`;
+    $('step-content').innerHTML=html;hydrateStep();document.querySelectorAll('[data-edit]').forEach(btn=>btn.addEventListener('click',()=>{current=Number(btn.dataset.edit);render();}));
   }
-
-  function input(id, label, value, placeholder, hint = '') {
-    return `<div class="setup-field"><label for="${id}">${label}</label><input id="${id}" value="${escapeHtml(value)}" placeholder="${escapeHtml(placeholder)}" required>${hint ? `<small>${hint}</small>` : ''}</div>`;
-  }
-
-  function render() {
-    const step = steps[current];
-    $('setup-count-number').textContent = current + 1;
-    $('setup-progress-bar').style.width = `${((current + 1) / steps.length) * 100}%`;
-    $('setup-step-label').textContent = step.kicker;
-    $('setup-step-title').textContent = step.title;
-    $('setup-step-description').textContent = step.description;
-    $('setup-step-icon').textContent = current === 5 ? '✓' : current === 4 ? '✓' : String(current + 1).padStart(2, '0');
-    $('back-btn').style.visibility = current === 0 ? 'hidden' : 'visible';
-    $('next-btn').textContent = current === steps.length - 1 ? 'Enter Workspace →' : 'Continue →';
-    $('save-btn').hidden = true;
-    setMessage('');
-
-    document.querySelectorAll('.setup-progress-steps span').forEach((el, index) => {
-      el.classList.toggle('active', index === current);
-      el.classList.toggle('completed', index < current);
-    });
-
-    let html = '';
-    if (current === 0) html = `<div class="setup-welcome"><div class="setup-points"><div class="setup-point"><b>01</b><div><b>Workspace identity</b><br><span>Define the environment your team will work in.</span></div></div><div class="setup-point"><b>02</b><div><b>Company foundation</b><br><span>Tell us the minimum legal identity needed to start.</span></div></div><div class="setup-point"><b>03</b><div><b>Preferences</b><br><span>Set language, timezone and regional formats.</span></div></div></div></div>`;
-    if (current === 1) html = `<div class="setup-form">${input('workspace-name','Workspace name',data.workspaceName,'e.g. Nardacci Pharma','Choose a clear name for this working environment.')}</div>`;
-    if (current === 2) html = `<div class="setup-form">${input('company-legal-name','Legal name',data.companyLegalName,'e.g. Nardacci Indústria Farmacêutica Ltda.','Required to establish the workspace foundation.')}${input('company-trade-name','Trade name',data.companyTradeName,'e.g. Nardacci Pharma','Optional.')}</div>`;
-    if (current === 3) html = `<div class="setup-form"><div class="setup-grid-2"><div class="setup-field"><label for="country">Country</label><select id="country"><option value="Brazil">Brazil</option><option value="Germany">Germany</option><option value="Italy">Italy</option><option value="United States">United States</option><option value="Portugal">Portugal</option></select></div><div class="setup-field"><label for="locale">Language</label><select id="locale"><option value="pt-BR">Português (Brasil)</option><option value="en-US">English (US)</option><option value="de-DE">Deutsch</option><option value="it-IT">Italiano</option></select></div></div><div class="setup-grid-2"><div class="setup-field"><label for="timezone">Timezone</label><select id="timezone"><option value="America/Sao_Paulo">São Paulo (UTC−03:00)</option><option value="Europe/Berlin">Berlin (UTC+01:00/+02:00)</option><option value="Europe/Rome">Rome (UTC+01:00/+02:00)</option><option value="America/New_York">New York (UTC−05:00/−04:00)</option></select></div><div class="setup-field"><label for="time-format">Time format</label><select id="time-format"><option value="24h">24-hour</option><option value="12h">12-hour</option></select></div></div><div class="setup-field"><label for="date-format">Date format</label><select id="date-format"><option value="DD/MM/YYYY">DD/MM/YYYY</option><option value="MM/DD/YYYY">MM/DD/YYYY</option><option value="YYYY-MM-DD">YYYY-MM-DD</option></select></div></div>`;
-    if (current === 4) html = `<div class="setup-review"><button type="button" class="review-row" data-edit="1"><span><strong>Workspace</strong><b>${escapeHtml(data.workspaceName)}</b></span><em>Edit</em></button><button type="button" class="review-row" data-edit="2"><span><strong>Company</strong><b>${escapeHtml(data.companyLegalName)}${data.companyTradeName ? ' · ' + escapeHtml(data.companyTradeName) : ''}</b></span><em>Edit</em></button><button type="button" class="review-row" data-edit="3"><span><strong>Location & Preferences</strong><b>${escapeHtml(data.country)} · ${escapeHtml(data.locale)} · ${escapeHtml(data.timezone)} · ${escapeHtml(data.dateFormat)} · ${escapeHtml(data.timeFormat)}</b></span><em>Edit</em></button><div class="review-note">✓ After confirmation, these settings become the operating foundation of your workspace.</div></div>`;
-    if (current === 5) html = `<div class="setup-ready"><div class="ready-badge">✓ Workspace ${revisit ? 'updated' : 'created'} successfully</div><div class="setup-welcome-icon">✓</div><h3>${revisit ? 'Your setup is up to date.' : 'You’re ready to go.'}</h3><p class="lead">Your LabMedSys workspace is now configured. From here, you can manage the environment and start working with the platform modules.</p></div>`;
-    $('step-content').innerHTML = html;
-    hydrateStep();
-    document.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => { current = Number(btn.dataset.edit); render(); }));
-  }
-
-  function hydrateStep() {
-    const bindings = {'workspace-name':'workspaceName','company-legal-name':'companyLegalName','company-trade-name':'companyTradeName','country':'country','timezone':'timezone','locale':'locale','date-format':'dateFormat','time-format':'timeFormat'};
-    Object.entries(bindings).forEach(([id,key]) => { const el=$(id); if(el){el.value=data[key]; el.addEventListener('input',()=>data[key]=el.value); el.addEventListener('change',()=>data[key]=el.value);} });
-  }
-
-  function validateStep() {
-    if (current === 1 && !data.workspaceName.trim()) return 'Enter a workspace name to continue.';
-    if (current === 2 && !data.companyLegalName.trim()) return 'Enter the company legal name to continue.';
-    return '';
-  }
-
-  function getClient() {
-    if (!window.LabMedSysAuth?.getSupabaseClient) throw new Error('Authentication service is unavailable. Please refresh and try again.');
-    return window.LabMedSysAuth.getSupabaseClient();
-  }
-
-  async function checkExistingWorkspace() {
-    const client = getClient();
-    const {data:existingId,error}=await client.rpc('get_current_workspace');
-    if(error) throw error;
-    if(existingId){workspaceId=existingId;return true;}
-    return false;
-  }
-
-  async function loadExistingWorkspace() {
-    const client = getClient();
-    const {data:setup,error}=await client.rpc('get_current_workspace_setup');
-    if(error) throw error;
-    const row = Array.isArray(setup) ? setup[0] : setup;
-    if(!row) throw new Error('Unable to load the current workspace configuration.');
-    workspaceId=row.workspace_id;
-    data.workspaceName=row.workspace_name||'';
-    data.companyLegalName=row.company_legal_name||'';
-    data.companyTradeName=row.company_trade_name||'';
-    data.country=row.country||'Brazil';
-    data.timezone=row.timezone||'America/Sao_Paulo';
-    data.locale=row.locale||'pt-BR';
-    data.dateFormat=row.date_format||'DD/MM/YYYY';
-    data.timeFormat=row.time_format||'24h';
-
-    // When an existing Workspace is opened from the avatar menu,
-    // resume at Review with the persisted configuration visible.
-    current = 4;
-  }
-
-  async function createWorkspace() {
-    const client = getClient();
-    const {data:createdId,error}=await client.rpc('create_workspace_setup',{p_workspace_name:data.workspaceName.trim(),p_company_legal_name:data.companyLegalName.trim(),p_company_trade_name:data.companyTradeName.trim(),p_country:data.country,p_timezone:data.timezone,p_locale:data.locale,p_date_format:data.dateFormat,p_time_format:data.timeFormat});
-    if(error)throw error;
-    workspaceId=createdId;
-  }
-
-  async function next() {
-    setMessage('');
-    const error=validateStep();
-    if(error){setMessage(error);return;}
-    if(current<steps.length-2){current+=1;render();return;}
-    if(current===steps.length-2){
-      const button=$('next-btn'); button.disabled=true; button.textContent=revisit?'Saving changes...':'Creating workspace...';
-      try{await createWorkspace();current+=1;render();}catch(err){console.error(err);setMessage(err?.message||'Unable to save the workspace. Please try again.');}finally{button.disabled=false;}
-      return;
-    }
-    window.location.replace('workspace.html');
-  }
-
-  function back(){if(current>0){current-=1;render();}}
-
-  function initUserMenu(){
-    const menu=$('setup-user-menu'), dropdown=$('setup-user-dropdown');
-    menu?.addEventListener('click',event=>{event.stopPropagation();const isOpen=!dropdown.hidden;dropdown.hidden=isOpen;menu.setAttribute('aria-expanded',String(!isOpen));});
-    document.addEventListener('click',()=>{if(dropdown&&!dropdown.hidden){dropdown.hidden=true;menu?.setAttribute('aria-expanded','false');}});
-    dropdown?.addEventListener('click',event=>event.stopPropagation());
-    $('setup-sign-out-btn')?.addEventListener('click',async()=>{const button=$('setup-sign-out-btn');try{button.disabled=true;button.innerHTML='<span>↪</span> Signing out...';await window.LabMedSysAuth.signOut();window.location.replace('index.html');}catch(error){console.error('Sign out failed:',error);button.disabled=false;button.innerHTML='<span>↪</span> Sign out';}});
-  }
-
-  async function init(){
-    try{
-      const session=await window.LabMedSysAuth?.getSession?.();
-      if(!session?.user){window.location.replace('index.html');return;}
-      const name=session.user.user_metadata?.full_name||session.user.email||'Workspace Admin';
-      const initial=name.trim().charAt(0).toUpperCase()||'A';
-      $('setup-user-name').textContent=name;
-      $('setup-dropdown-name').textContent=name;
-      $('setup-user-email').textContent=session.user.email||'';
-      $('setup-user-avatar').textContent=initial;
-      $('setup-dropdown-avatar').textContent=initial;
-      initUserMenu();
-      if(await checkExistingWorkspace()){
-        if(!revisit){window.location.replace('workspace.html');return;}
-        await loadExistingWorkspace();
-      } else if(revisit) {
-        window.location.replace('workspace-setup.html');
-        return;
-      }
-      render();
-    }catch(error){console.error('Workspace setup initialization failed:',error);setMessage(error?.message||'Unable to load workspace setup. Please refresh and try again.');}
-  }
-
-  $('next-btn').addEventListener('click',next);
-  $('back-btn').addEventListener('click',back);
-  document.addEventListener('DOMContentLoaded',init);
+  function hydrateStep(){const bindings={'workspace-name':'workspaceName','company-legal-name':'companyLegalName','company-trade-name':'companyTradeName','country':'country','timezone':'timezone','locale':'locale','date-format':'dateFormat','time-format':'timeFormat'};Object.entries(bindings).forEach(([id,key])=>{const el=$(id);if(el){el.value=data[key];el.addEventListener('input',()=>data[key]=el.value);el.addEventListener('change',()=>data[key]=el.value);}});}
+  function validateStep(){if(current===1&&!data.workspaceName.trim())return'Enter a workspace name to continue.';if(current===2&&!data.companyLegalName.trim())return'Enter the company legal name to continue.';return'';}
+  function getClient(){if(!window.LabMedSysAuth?.getSupabaseClient)throw new Error('Authentication service is unavailable. Please refresh and try again.');return window.LabMedSysAuth.getSupabaseClient();}
+  async function checkExistingWorkspace(){const {data:existingId,error}=await getClient().rpc('get_current_workspace');if(error)throw error;if(existingId){workspaceId=existingId;return true;}return false;}
+  async function loadExistingWorkspace(){const {data:setup,error}=await getClient().rpc('get_current_workspace_setup');if(error)throw error;const row=Array.isArray(setup)?setup[0]:setup;if(!row)throw new Error('Unable to load the current workspace configuration.');workspaceId=row.workspace_id;data.workspaceName=row.workspace_name||'';data.companyLegalName=row.company_legal_name||'';data.companyTradeName=row.company_trade_name||'';data.country=row.country||'Brazil';data.timezone=row.timezone||'America/Sao_Paulo';data.locale=row.locale||'pt-BR';data.dateFormat=row.date_format||'DD/MM/YYYY';data.timeFormat=row.time_format||'24h';current=4;}
+  async function saveWorkspace(){const {data:createdId,error}=await getClient().rpc('create_workspace_setup',{p_workspace_name:data.workspaceName.trim(),p_company_legal_name:data.companyLegalName.trim(),p_company_trade_name:data.companyTradeName.trim(),p_country:data.country,p_timezone:data.timezone,p_locale:data.locale,p_date_format:data.dateFormat,p_time_format:data.timeFormat});if(error)throw error;workspaceId=createdId||workspaceId;}
+  async function next(){setMessage('');const error=validateStep();if(error){setMessage(error);return;}if(current<steps.length-1){current++;render();return;}const button=$('next-btn');button.disabled=true;button.textContent=revisit?'Saving changes...':'Saving workspace...';try{await saveWorkspace();window.location.replace('workspace.html');}catch(err){console.error(err);setMessage(err?.message||'Unable to save the workspace. Please try again.');button.disabled=false;button.textContent=revisit?'Save Changes →':'Save & Continue →';}}
+  function back(){if(current>0){current--;render();}}
+  function initUserMenu(){const menu=$('setup-user-menu'),dropdown=$('setup-user-dropdown');menu?.addEventListener('click',e=>{e.stopPropagation();const open=!dropdown.hidden;dropdown.hidden=open;menu.setAttribute('aria-expanded',String(!open));});document.addEventListener('click',()=>{if(dropdown&&!dropdown.hidden){dropdown.hidden=true;menu?.setAttribute('aria-expanded','false');}});dropdown?.addEventListener('click',e=>e.stopPropagation());$('setup-sign-out-btn')?.addEventListener('click',async()=>{const b=$('setup-sign-out-btn');try{b.disabled=true;b.innerHTML='<span>↪</span> Signing out...';await window.LabMedSysAuth.signOut();window.location.replace('index.html');}catch(e){console.error(e);b.disabled=false;b.innerHTML='<span>↪</span> Sign out';}});}
+  async function init(){try{const session=await window.LabMedSysAuth?.getSession?.();if(!session?.user){window.location.replace('index.html');return;}const name=session.user.user_metadata?.full_name||session.user.email||'Workspace Admin';const initial=name.trim().charAt(0).toUpperCase()||'A';$('setup-user-name').textContent=name;$('setup-dropdown-name').textContent=name;$('setup-user-email').textContent=session.user.email||'';$('setup-user-avatar').textContent=initial;$('setup-dropdown-avatar').textContent=initial;initUserMenu();if(await checkExistingWorkspace()){if(!revisit){window.location.replace('workspace.html');return;}await loadExistingWorkspace();}else if(revisit){window.location.replace('workspace-setup.html');return;}render();}catch(error){console.error('Workspace setup initialization failed:',error);setMessage(error?.message||'Unable to load workspace setup. Please refresh and try again.');}}
+  document.addEventListener('DOMContentLoaded',()=>{$('next-btn').addEventListener('click',next);$('back-btn').addEventListener('click',back);init();});
 })();
