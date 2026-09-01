@@ -130,6 +130,7 @@ function renderDashboard() {
 
 function route() {
   if (location.hash === '#signup') renderSignup();
+  else if (location.hash === '#dashboard') renderDashboard();
   else renderLogin();
 }
 
