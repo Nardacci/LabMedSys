@@ -66,5 +66,5 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', () => { init(); const current = window.location.pathname.split('/').pop() || 'workspace.html'; document.querySelectorAll('.workspace-nav-link').forEach((link) => { if (link.getAttribute('href') === current) link.classList.add('active'); else link.classList.remove('active'); }); });
 })();
