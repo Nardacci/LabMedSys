@@ -26,7 +26,9 @@
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       await window.LabMedSysAuth.signIn({ email, password });
-      window.location.href = 'workspace.html';
+      // The setup page is the single onboarding gate. It immediately
+      // redirects existing workspace members to Workspace Home.
+      window.location.href = 'workspace-setup.html';
     } catch (error) {
       console.error('LabMedSys sign in failed:', error);
       setMessage(error?.message || 'Unable to sign in. Please try again.', 'error');
