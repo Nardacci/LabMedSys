@@ -368,3 +368,14 @@ button:hover {
 .welcome-secondary{margin-top:12px;border:0;background:transparent;color:#718096;font-size:13px;cursor:pointer}
 .welcome-panel>.auth-version{text-align:center;margin-top:24px}
 @media(max-width:640px){.welcome-page{padding:16px}.welcome-panel{padding:28px 24px;min-height:620px}.welcome-content h1{font-size:34px}}
+
+/* Package 1.2 - KORbuild authentication flow */
+.brand-home{color:inherit;text-decoration:none;display:block}
+.message{min-height:18px;margin-top:2px;font-size:12px;line-height:1.4;color:#b54848}
+.message.success{color:#247a4b}.message.error{color:#b54848}
+.check-page{min-height:100vh;padding:30px;background:linear-gradient(135deg,#eef1f5,#e5e9ef);display:flex;align-items:center;justify-content:center}
+.check-shell{width:min(1100px,100%);min-height:650px;display:grid;grid-template-columns:1fr 1fr;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 20px 60px rgba(31,42,72,.10)}
+.check-brand{padding:70px 72px;color:#fff;background:radial-gradient(circle at 10% 0%,rgba(120,110,255,.20),transparent 28%),linear-gradient(145deg,#1d2740 0%,#252b50 48%,#31295b 100%)}
+.check-brand .brand-label{margin-top:28px}.check-brand .brand-name{margin-top:12px}.check-welcome{margin-top:100px}.check-welcome h1{font-size:40px;letter-spacing:-.04em;margin:14px 0}.check-welcome p{color:rgba(255,255,255,.72);line-height:1.65}
+.check-panel{padding:70px;display:flex;flex-direction:column;justify-content:center}.check-panel h1{font-size:36px;letter-spacing:-.045em;margin:16px 0 12px;font-weight:600}.mail-icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:#f0edff;color:#6551c8;font-size:28px;margin-bottom:26px}.email-highlight{margin:18px 0;padding:14px 16px;border-radius:11px;background:#f7f8fb;border:1px solid #e2e6ed;color:#4b5568;font-weight:700}.check-instruction{font-size:14px;color:#748093;line-height:1.6}.help-box{margin-top:24px;padding:18px;border:1px solid #e3e6ee;border-radius:12px;background:#fafbfc}.help-box strong{display:block;font-size:13px;margin-bottom:8px}.text-btn{height:auto;margin:0;padding:0;background:none;color:#5c56bf;box-shadow:none;text-align:left;font-size:12px}.text-btn:hover{transform:none;box-shadow:none}
+@media(max-width:820px){.check-page{padding:16px}.check-shell{grid-template-columns:1fr}.check-brand{padding:42px 32px}.check-welcome{margin-top:45px}.check-panel{padding:48px 32px}}
