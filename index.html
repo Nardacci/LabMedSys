@@ -5,10 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="LabMedSys - Pharmaceutical Operations Platform">
   <title>LabMedSys</title>
-  <link rel="stylesheet" href="./style.css?v=2">
+  <link rel="stylesheet" href="./style.css?v=1.2.0">
 </head>
 <body>
-  <div id="app"></div>
-  <script src="./app.js?v=2"></script>
+  <main class="auth-page">
+    <section class="auth-brand"><div class="brand-content">
+      <div class="brand-mark">L</div>
+      <div class="brand-label">PHARMACEUTICAL OPERATIONS PLATFORM</div>
+      <div class="brand-name">Lab<span>Med</span>Sys</div>
+      <div class="brand-message"><p>Build compliant operations.</p><p>Run better pharmaceutical processes.</p></div>
+      <div class="brand-footer"><div class="brand-footer-icon">✓</div><div><strong>Built for secure workspaces</strong><span>Each company operates in its own protected environment.</span></div></div>
+    </div></section>
+    <section class="auth-panel"><div class="auth-card">
+      <div class="eyebrow">WELCOME BACK</div>
+      <h1>Sign in</h1>
+      <p class="auth-subtitle">Access your company workspace.</p>
+      <form id="login-form">
+        <label>Email<input id="email" type="email" autocomplete="email" placeholder="you@company.com" required></label>
+        <label>Password<input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></label>
+        <button id="login-submit" type="submit">Sign in</button>
+        <div id="login-message" class="message" role="alert"></div>
+      </form>
+      <div class="auth-divider"></div>
+      <div class="auth-create"><span>New to LabMedSys?</span><a href="signup.html">Create your workspace →</a></div>
+      <div class="auth-version">LabMedSys · SaaS Foundation · Development</div>
+    </div></section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app-config.js?v=1.2.0"></script>
+  <script src="./auth-service.js?v=1.2.0"></script>
+  <script src="./app.js?v=1.2.0"></script>
 </body>
 </html>
