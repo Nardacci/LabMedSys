@@ -20,7 +20,7 @@
   };
 
   const $ = (id) => document.getElementById(id);
-  const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const escapeHtml = (value) => String(value ?? '').replace(/[&<>'\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
   function setMessage(text, type = '') {
     const el = $('setup-message');
@@ -65,81 +65,70 @@
     return '';
   }
 
+  function getClient() {
+    if (!window.LabMedSysAuth?.getSupabaseClient) throw new Error('Authentication service is unavailable. Please refresh and try again.');
+    return window.LabMedSysAuth.getSupabaseClient();
+  }
+
   async function checkExistingWorkspace() {
-    const client = window.LabMedSysAuth?.getSupabaseClient?.();
-    if (!client || !sessionUser) return false;
-    const { data: members, error } = await client.from('workspace_members').select('workspace_id, status, workspaces!inner(id, status)').eq('user_id', sessionUser.id).eq('status', 'active').limit(1);
-    if (error) { console.warn('Workspace lookup unavailable:', error.message); return false; }
-    const existing = members?.find(m => m.workspaces?.status === 'active');
-    if (existing) { workspaceId = existing.workspace_id; return true; }
+    const client = getClient();
+    if (!sessionUser) return false;
+    const {data:members,error}=await client.from('workspace_members').select('workspace_id,status,workspaces!inner(id,status)').eq('user_id',sessionUser.id).eq('status','active').limit(1);
+    if(error) throw error;
+    const existing=members?.find(m=>m.workspaces?.status==='active');
+    if(existing){workspaceId=existing.workspace_id;return true;}
     return false;
   }
 
   async function createWorkspace() {
-    const client = window.LabMedSysAuth?.getSupabaseClient?.();
-    if (!client) throw new Error('Supabase client is unavailable.');
-    const { data: createdId, error } = await client.rpc('create_workspace_setup', {
-      p_workspace_name: data.workspaceName.trim(),
-      p_company_legal_name: data.companyLegalName.trim(),
-      p_company_trade_name: data.companyTradeName.trim(),
-      p_country: data.country,
-      p_timezone: data.timezone,
-      p_locale: data.locale,
-      p_date_format: data.dateFormat,
-      p_time_format: data.timeFormat
-    });
-    if (error) throw error;
-    workspaceId = createdId;
+    const client = getClient();
+    const {data:createdId,error}=await client.rpc('create_workspace_setup',{p_workspace_name:data.workspaceName.trim(),p_company_legal_name:data.companyLegalName.trim(),p_company_trade_name:data.companyTradeName.trim(),p_country:data.country,p_timezone:data.timezone,p_locale:data.locale,p_date_format:data.dateFormat,p_time_format:data.timeFormat});
+    if(error)throw error;
+    workspaceId=createdId;
   }
 
   async function next() {
     setMessage('');
-    const error = validateStep();
-    if (error) { setMessage(error); return; }
-    if (current < steps.length - 2) { current += 1; render(); return; }
-    if (current === steps.length - 2) {
-      const button = $('next-btn');
-      button.disabled = true; button.textContent = 'Creating workspace...';
-      try { await createWorkspace(); current += 1; render(); }
-      catch (err) { console.error(err); setMessage(err?.message || 'Unable to create the workspace. Please try again.'); }
-      finally { button.disabled = false; }
+    const error=validateStep();
+    if(error){setMessage(error);return;}
+    if(current<steps.length-2){current+=1;render();return;}
+    if(current===steps.length-2){
+      const button=$('next-btn'); button.disabled=true; button.textContent='Creating workspace...';
+      try{await createWorkspace();current+=1;render();}catch(err){console.error(err);setMessage(err?.message||'Unable to create the workspace. Please try again.');}finally{button.disabled=false;}
       return;
     }
     window.location.replace('workspace.html');
   }
 
-  function back() { if (current > 0) { current -= 1; render(); } }
+  function back(){if(current>0){current-=1;render();}}
 
-  function initUserMenu() {
-    const menu = $('setup-user-menu'), dropdown = $('setup-user-dropdown');
-    menu?.addEventListener('click', event => { event.stopPropagation(); const isOpen = !dropdown.hidden; dropdown.hidden = isOpen; menu.setAttribute('aria-expanded', String(!isOpen)); });
-    document.addEventListener('click', () => { if (dropdown && !dropdown.hidden) { dropdown.hidden = true; menu?.setAttribute('aria-expanded', 'false'); } });
-    dropdown?.addEventListener('click', event => event.stopPropagation());
-    $('setup-sign-out-btn')?.addEventListener('click', async () => { const button = $('setup-sign-out-btn'); try { button.disabled = true; button.innerHTML = '<span>↪</span> Signing out...'; await window.LabMedSysAuth.signOut(); window.location.replace('index.html'); } catch (error) { console.error('Sign out failed:', error); button.disabled = false; button.innerHTML = '<span>↪</span> Sign out'; } });
+  function initUserMenu(){
+    const menu=$('setup-user-menu'), dropdown=$('setup-user-dropdown');
+    menu?.addEventListener('click',event=>{event.stopPropagation();const isOpen=!dropdown.hidden;dropdown.hidden=isOpen;menu.setAttribute('aria-expanded',String(!isOpen));});
+    document.addEventListener('click',()=>{if(dropdown&&!dropdown.hidden){dropdown.hidden=true;menu?.setAttribute('aria-expanded','false');}});
+    dropdown?.addEventListener('click',event=>event.stopPropagation());
+    $('setup-sign-out-btn')?.addEventListener('click',async()=>{const button=$('setup-sign-out-btn');try{button.disabled=true;button.innerHTML='<span>↪</span> Signing out...';await window.LabMedSysAuth.signOut();window.location.replace('index.html');}catch(error){console.error('Sign out failed:',error);button.disabled=false;button.innerHTML='<span>↪</span> Sign out';}});
   }
 
-  async function init() {
-    try {
-      const session = await window.LabMedSysAuth?.getSession?.();
-      if (!session?.user) { window.location.replace('index.html'); return; }
-      sessionUser = session.user;
-      const name = session.user.user_metadata?.full_name || session.user.email || 'Workspace Admin';
-      const initial = name.trim().charAt(0).toUpperCase() || 'A';
-      $('setup-user-name').textContent = name;
-      $('setup-dropdown-name').textContent = name;
-      $('setup-user-email').textContent = session.user.email || '';
-      $('setup-user-avatar').textContent = initial;
-      $('setup-dropdown-avatar').textContent = initial;
+  async function init(){
+    try{
+      const session=await window.LabMedSysAuth?.getSession?.();
+      if(!session?.user){window.location.replace('index.html');return;}
+      sessionUser=session.user;
+      const name=session.user.user_metadata?.full_name||session.user.email||'Workspace Admin';
+      const initial=name.trim().charAt(0).toUpperCase()||'A';
+      $('setup-user-name').textContent=name;
+      $('setup-dropdown-name').textContent=name;
+      $('setup-user-email').textContent=session.user.email||'';
+      $('setup-user-avatar').textContent=initial;
+      $('setup-dropdown-avatar').textContent=initial;
       initUserMenu();
-      if (await checkExistingWorkspace()) { window.location.replace('workspace.html'); return; }
+      if(await checkExistingWorkspace()){window.location.replace('workspace.html');return;}
       render();
-    } catch (error) {
-      console.error('Workspace setup initialization failed:', error);
-      setMessage('Unable to load workspace setup. Please refresh and try again.');
-    }
+    }catch(error){console.error('Workspace setup initialization failed:',error);setMessage(error?.message||'Unable to load workspace setup. Please refresh and try again.');}
   }
 
-  $('next-btn').addEventListener('click', next);
-  $('back-btn').addEventListener('click', back);
-  document.addEventListener('DOMContentLoaded', init);
+  $('next-btn').addEventListener('click',next);
+  $('back-btn').addEventListener('click',back);
+  document.addEventListener('DOMContentLoaded',init);
 })();
