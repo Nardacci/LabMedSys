@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMedSys · Create workspace</title>
+  <link rel="stylesheet" href="./style.css?v=1.2.0">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-brand"><div class="brand-content">
+      <a href="index.html" class="brand-home" aria-label="Back to LabMedSys">
+        <div class="brand-mark">L</div>
+        <div class="brand-label">PHARMACEUTICAL OPERATIONS PLATFORM</div>
+        <div class="brand-name">Lab<span>Med</span>Sys</div>
+      </a>
+      <div class="brand-message signup-message"><p>Your pharmaceutical workspace</p><p>starts here.</p></div>
+      <div class="brand-footer"><div class="brand-footer-icon">✓</div><div><strong>Start with a secure foundation</strong><span>Your company receives an isolated workspace designed for controlled operations.</span></div></div>
+    </div></section>
+    <section class="auth-panel"><div class="auth-card auth-card-wide">
+      <div class="eyebrow">CREATE YOUR WORKSPACE</div>
+      <h1>Start building better.</h1>
+      <p class="auth-subtitle">Create your company account and start your LabMedSys workspace.</p>
+      <form id="signup-form" novalidate>
+        <div class="form-grid">
+          <label>Full name<input id="full-name" type="text" autocomplete="name" placeholder="Your full name" required></label>
+          <label>Company name<input id="company-name" type="text" autocomplete="organization" placeholder="Your company" required></label>
+        </div>
+        <label>Work email<input id="signup-email" type="email" autocomplete="email" placeholder="you@company.com" required></label>
+        <div class="form-grid">
+          <label>Password<input id="signup-password" type="password" autocomplete="new-password" placeholder="Minimum 8 characters" minlength="8" required></label>
+          <label>Confirm password<input id="confirm-password" type="password" autocomplete="new-password" placeholder="Repeat password" minlength="8" required></label>
+        </div>
+        <label class="terms"><input id="accept-terms" type="checkbox" required><span>I agree to the Terms of Service and Privacy Policy.</span></label>
+        <button id="signup-submit" type="submit">Create workspace →</button>
+        <div id="signup-message" class="message" role="alert"></div>
+      </form>
+      <div class="auth-create auth-create-centered"><span>Already have an account?</span><a href="index.html">Sign in</a></div>
+      <div class="auth-version">LabMedSys · SaaS Foundation · Development</div>
+    </div></section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./auth-service.js?v=1.2.0"></script>
+  <script src="./signup.js?v=1.2.0"></script>
+</body>
+</html>
