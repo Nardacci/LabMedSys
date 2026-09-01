@@ -50,7 +50,8 @@ function renderLogin() {
       <div class="auth-version">LabMedSys · SaaS Foundation · Development</div>
     </div></section>
   </main>`;
-  document.querySelector('#login-form').onsubmit = e => { e.preventDefault(); location.hash = 'welcome'; };\n  updateConnectionBadge();
+  document.querySelector('#login-form').onsubmit = e => { e.preventDefault(); location.hash = 'welcome'; };
+  updateConnectionBadge();
 }
 
 function renderSignup() {
@@ -74,7 +75,8 @@ function renderSignup() {
       <div class="auth-version">LabMedSys · SaaS Foundation · Development</div>
     </div></section>
   </main>`;
-  updateConnectionBadge();\n  document.querySelector('#signup-form').onsubmit = e => {
+  updateConnectionBadge();
+  document.querySelector('#signup-form').onsubmit = e => {
     e.preventDefault();
     const f = e.currentTarget;
     if (f.password.value !== f.confirmPassword.value) {
