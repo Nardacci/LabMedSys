@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMedSys · Confirm your email</title>
+  <link rel="stylesheet" href="./style.css?v=1.2.0">
+</head>
+<body>
+  <main class="check-page">
+    <section class="check-shell">
+      <div class="check-brand">
+        <div class="brand-mark">L</div>
+        <div class="brand-label">PHARMACEUTICAL OPERATIONS PLATFORM</div>
+        <div class="brand-name">Lab<span>Med</span>Sys</div>
+        <div class="check-welcome">
+          <div class="eyebrow">WELCOME TO LABMEDSYS</div>
+          <h1>Welcome aboard! 👋</h1>
+          <p>You are about to build compliant operations and run better pharmaceutical processes.</p>
+        </div>
+      </div>
+      <div class="check-panel">
+        <div class="mail-icon">✉</div>
+        <div class="eyebrow">CONFIRM YOUR EMAIL</div>
+        <h1>One more step to get started.</h1>
+        <p class="auth-subtitle">We've sent a confirmation link to:</p>
+        <div id="confirmation-email" class="email-highlight">your@email.com</div>
+        <p class="check-instruction">Please check your inbox and click the confirmation link to activate your account.</p>
+        <div class="help-box">
+          <strong>Didn't receive the email?</strong>
+          <button id="resend-confirmation" type="button" class="text-btn">Resend confirmation email</button>
+          <div id="resend-message" class="message" role="status"></div>
+        </div>
+        <div class="auth-create auth-create-centered"><span>Already confirmed your email?</span><a href="index.html">Sign in</a></div>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./auth-service.js?v=1.2.0"></script>
+  <script src="./check-email.js?v=1.2.0"></script>
+</body>
+</html>
