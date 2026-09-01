@@ -25,7 +25,7 @@ document.querySelector('#login-form').onsubmit=async e=>{e.preventDefault();cons
 
 function renderSignup(){
 app.innerHTML=`<main class="auth-page"><section class="auth-brand"><div class="brand-content"><div class="brand-mark">L</div><div class="brand-label">PHARMACEUTICAL OPERATIONS PLATFORM</div><div class="brand-name">Lab<span>Med</span>Sys</div><div class="brand-message signup-message"><p>Your pharmaceutical workspace</p><p>starts here.</p></div><div class="brand-footer"><div class="brand-footer-icon">✓</div><div><strong>Start with a secure foundation</strong><span>Your company receives an isolated workspace designed for controlled operations.</span></div></div></div></section><section class="auth-panel"><div class="auth-card auth-card-wide"><div class="eyebrow">CREATE YOUR WORKSPACE</div><h1>Start building better.</h1><p class="auth-subtitle">Create your company account and start your LabMedSys workspace.</p><form id="signup-form"><div class="form-grid"><label>Full name<input name="fullName" type="text" placeholder="Your full name" required></label><label>Company name<input name="companyName" type="text" placeholder="Your company" required></label></div><label>Work email<input name="email" type="email" placeholder="you@company.com" required></label><div class="form-grid"><label>Password<input name="password" type="password" placeholder="Minimum 8 characters" minlength="8" required></label><label>Confirm password<input name="confirmPassword" type="password" placeholder="Repeat password" required></label></div><label class="terms"><input type="checkbox" name="terms" required><span>I agree to the Terms of Service and Privacy Policy.</span></label><div id="form-message"></div><button id="signup-button" type="submit">Create workspace →</button></form><div class="auth-create auth-create-centered"><span>Already have an account?</span><a href="#login">Sign in</a></div><div class="auth-version">LabMedSys · SaaS Foundation · Development</div></div></section></main>`;
-document.querySelector('#signup-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,m=document.querySelector('#form-message'),b=document.querySelector('#signup-button'),full_name=f.fullName.value.trim(),company_name=f.companyName.value.trim(),workspace_slug=slugify(company_name);msg(m,'');if(f.password.value!==f.confirmPassword.value)return msg(m,'Passwords do not match.');b.disabled=true;b.textContent='Creating...';try{const {data,error}=await supabase.auth.signUp({email:f.email.value.trim(),password:f.password.value,options:{data:{full_name,company_name,workspace_slug}}});if(error)throw error;if(data.session){await supabase.auth.signOut();location.hash='login'}else{msg(m,'Account created. Check your email to confirm your account, then sign in.','success');f.reset()}}catch(err){msg(m,err.message||'Unable to create your workspace.')}finally{b.disabled=false;b.textContent='Create workspace →'}};
+document.querySelector('#signup-form').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,m=document.querySelector('#form-message'),b=document.querySelector('#signup-button'),full_name=f.fullName.value.trim(),company_name=f.companyName.value.trim(),workspace_slug=slugify(company_name);msg(m,'');if(f.password.value!==f.confirmPassword.value)return msg(m,'Passwords do not match.');b.disabled=true;b.textContent='Creating...';try{const {data,error}=await supabase.auth.signUp({email:f.email.value.trim(),password:f.password.value,options:{emailRedirectTo:`${window.location.origin}${window.location.pathname}?confirmed=1`,data:{full_name,company_name,workspace_slug}}});if(error)throw error;if(data.session){await supabase.auth.signOut();location.hash='login'}else{msg(m,'Account created. Check your email to confirm your account, then sign in.','success');f.reset()}}catch(err){msg(m,err.message||'Unable to create your workspace.')}finally{b.disabled=false;b.textContent='Create workspace →'}};
 }
 
 function renderWelcome(user,workspace){
@@ -45,6 +45,13 @@ document.querySelector('#logout').onclick=async()=>{await supabase.auth.signOut(
 }
 
 async function route(){
+const confirmed=new URLSearchParams(location.search).get('confirmed');
+if(confirmed==='1'){
+  await supabase.auth.getSession();
+  await supabase.auth.signOut();
+  history.replaceState({},'',window.location.pathname+'#login');
+  return renderLogin();
+}
 if(location.hash==='#signup')return renderSignup();
 const {data:{session}}=await supabase.auth.getSession();
 if(location.hash==='#dashboard' || location.hash==='#welcome'){
