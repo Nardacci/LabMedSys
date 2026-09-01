@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LabMedSys · Welcome</title>
-  <link rel="stylesheet" href="./style.css?v=1.2.0">
+  <title>LabMedSys · Email confirmed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=1.3.0">
 </head>
 <body>
-  <main class="welcome-page"><section class="welcome-panel">
-    <div class="welcome-logo"><div class="brand-mark">L</div><span>Lab<span>Med</span>Sys</span></div>
-    <div class="welcome-content">
-      <div class="welcome-check">✓</div><div class="eyebrow">WORKSPACE CREATED</div>
-      <h1 id="welcome-title">Welcome.</h1>
-      <p>Your account is confirmed and your LabMedSys foundation is ready to go.</p>
-      <p class="welcome-description">You now have a secure foundation for building and managing your pharmaceutical operations.</p>
-      <div class="welcome-workspace"><div id="workspace-avatar" class="workspace-avatar">L</div><div><span>YOUR WORKSPACE</span><strong id="workspace-name">LabMedSys</strong></div></div>
-      <button id="go-to-signin">Continue to Sign in →</button>
-    </div>
-    <div class="auth-version">LabMedSys · SaaS Foundation · Development</div>
-  </section></main>
-  <script src="./signup-complete.js?v=1.2.0"></script>
+  <div class="complete-page">
+    <main class="complete-card">
+      <div class="brand-mark complete-mark">L</div>
+      <div class="success-icon">✓</div>
+      <p class="eyebrow panel-eyebrow">EMAIL CONFIRMED</p>
+      <h1>Your account is ready.</h1>
+      <p class="muted">
+        Your email has been confirmed successfully. Sign in to continue setting up your LabMedSys workspace.
+      </p>
+      <button id="go-to-signin" class="primary-btn">Go to Sign in <span>→</span></button>
+    </main>
+  </div>
+  <script src="./signup-complete.js?v=1.3.0"></script>
 </body>
 </html>
