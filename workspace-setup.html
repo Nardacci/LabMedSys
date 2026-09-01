@@ -6,13 +6,33 @@
   <meta name="description" content="LabMedSys Workspace Setup">
   <title>LabMedSys · Workspace Setup</title>
   <link rel="stylesheet" href="./style.css?v=1.5.0">
-  <link rel="stylesheet" href="./workspace-setup.css?v=1.0.0">
+  <link rel="stylesheet" href="./workspace-setup.css?v=1.1.0">
 </head>
 <body>
   <main class="setup-shell">
-    <header class="setup-header">
-      <a class="setup-brand" href="index.html" aria-label="LabMedSys home"><span class="setup-mark">L</span><strong>Lab<span>Med</span>Sys</strong></a>
-      <div class="setup-user"><span id="setup-user-avatar">A</span><span id="setup-user-email">Setting up your account</span></div>
+    <header class="workspace-header setup-header">
+      <a class="workspace-brand" href="index.html" aria-label="LabMedSys home">
+        <div class="sidebar-mark">L</div>
+        <strong>Lab<span>Med</span>Sys</strong>
+      </a>
+      <div class="workspace-header-actions">
+        <button class="header-icon" aria-label="Notifications">◦</button>
+        <div class="user-menu-wrap">
+          <button class="user-chip" id="setup-user-menu" aria-expanded="false" aria-haspopup="true">
+            <span class="user-avatar" id="setup-user-avatar">A</span>
+            <span><strong id="setup-user-name">Workspace Admin</strong><small>Workspace Owner</small></span>
+            <b>⌄</b>
+          </button>
+          <div class="user-dropdown" id="setup-user-dropdown" hidden>
+            <div class="user-dropdown-profile">
+              <span class="user-avatar" id="setup-dropdown-avatar">A</span>
+              <div><strong id="setup-dropdown-name">Workspace Admin</strong><small id="setup-user-email"></small></div>
+            </div>
+            <div class="user-dropdown-divider"></div>
+            <button class="dropdown-item danger" id="setup-sign-out-btn"><span>↪</span> Sign out</button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <section class="setup-progress" aria-label="Workspace setup progress">
@@ -37,6 +57,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./app-config.js?v=1.2.0"></script>
   <script src="./auth-service.js?v=1.3.0"></script>
-  <script src="./workspace-setup.js?v=1.0.0"></script>
+  <script src="./workspace-setup.js?v=1.1.0"></script>
 </body>
 </html>
