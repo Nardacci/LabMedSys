@@ -1,5 +1,35 @@
 const app = document.querySelector('#app');
 
+async function checkSupabaseConnection() {
+  try {
+    const { error } = await window.LABMEDSYS_SUPABASE.auth.getSession();
+    if (error) throw error;
+    return { ok: true };
+  } catch (error) {
+    console.error('Supabase connection failed:', error);
+    return { ok: false, error };
+  }
+}
+
+function connectionBadge() {
+  return '<div class="connection-status" id="connection-status"><span></span> Connecting secure foundation...</div>';
+}
+
+async function updateConnectionBadge() {
+  const el = document.querySelector('#connection-status');
+  if (!el) return;
+  const result = await checkSupabaseConnection();
+  if (result.ok) {
+    el.innerHTML = '<span></span> Supabase connected.';
+    el.classList.remove('connection-error');
+    el.classList.add('connection-ok');
+  } else {
+    el.innerHTML = '<span></span> Connection unavailable.';
+    el.classList.remove('connection-ok');
+    el.classList.add('connection-error');
+  }
+}
+
 function renderLogin() {
   app.innerHTML = `<main class="auth-page">
     <section class="auth-brand"><div class="brand-content">
@@ -14,13 +44,13 @@ function renderLogin() {
       <form id="login-form">
         <label>Email<input name="email" type="email" placeholder="you@company.com" required></label>
         <label>Password<input name="password" type="password" placeholder="Enter your password" required></label>
-        <div id="form-message"></div><button type="submit">Sign in</button>
+        <div id="form-message"></div><button type="submit">Sign in</button>${connectionBadge()}
       </form>
       <div class="auth-divider"></div><div class="auth-create"><span>New to LabMedSys?</span><a href="#signup">Create your workspace →</a></div>
       <div class="auth-version">LabMedSys · SaaS Foundation · Development</div>
     </div></section>
   </main>`;
-  document.querySelector('#login-form').onsubmit = e => { e.preventDefault(); location.hash = 'welcome'; };
+  document.querySelector('#login-form').onsubmit = e => { e.preventDefault(); location.hash = 'welcome'; };\n  updateConnectionBadge();
 }
 
 function renderSignup() {
@@ -38,13 +68,13 @@ function renderSignup() {
         <label>Work email<input name="email" type="email" placeholder="you@company.com" required></label>
         <div class="form-grid"><label>Password<input name="password" type="password" placeholder="Minimum 8 characters" minlength="8" required></label><label>Confirm password<input name="confirmPassword" type="password" placeholder="Repeat password" required></label></div>
         <label class="terms"><input type="checkbox" required><span>I agree to the Terms of Service and Privacy Policy.</span></label>
-        <div id="form-message"></div><button type="submit">Create workspace →</button>
+        <div id="form-message"></div><button type="submit">Create workspace →</button>${connectionBadge()}
       </form>
       <div class="auth-create auth-create-centered"><span>Already have an account?</span><a href="#login">Sign in</a></div>
       <div class="auth-version">LabMedSys · SaaS Foundation · Development</div>
     </div></section>
   </main>`;
-  document.querySelector('#signup-form').onsubmit = e => {
+  updateConnectionBadge();\n  document.querySelector('#signup-form').onsubmit = e => {
     e.preventDefault();
     const f = e.currentTarget;
     if (f.password.value !== f.confirmPassword.value) {
