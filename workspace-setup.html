@@ -6,28 +6,18 @@
   <meta name="description" content="LabMedSys Workspace Setup">
   <title>LabMedSys · Workspace Setup</title>
   <link rel="stylesheet" href="./style.css?v=1.5.0">
-  <link rel="stylesheet" href="./workspace-setup.css?v=1.2.0">
+  <link rel="stylesheet" href="./workspace-setup.css?v=1.3.0">
 </head>
 <body>
   <main class="setup-shell">
     <header class="workspace-header setup-header">
-      <a class="workspace-brand" href="index.html" aria-label="LabMedSys home">
-        <div class="sidebar-mark">L</div>
-        <strong>Lab<span>Med</span>Sys</strong>
-      </a>
+      <a class="workspace-brand" href="index.html" aria-label="LabMedSys home"><div class="sidebar-mark">L</div><strong>Lab<span>Med</span>Sys</strong></a>
       <div class="workspace-header-actions">
         <button class="header-icon" aria-label="Notifications">◦</button>
         <div class="user-menu-wrap">
-          <button class="user-chip" id="setup-user-menu" aria-expanded="false" aria-haspopup="true">
-            <span class="user-avatar" id="setup-user-avatar">A</span>
-            <span><strong id="setup-user-name">Workspace Admin</strong><small>Workspace Owner</small></span>
-            <b>⌄</b>
-          </button>
+          <button class="user-chip" id="setup-user-menu" aria-expanded="false" aria-haspopup="true"><span class="user-avatar" id="setup-user-avatar">A</span><span><strong id="setup-user-name">Workspace Admin</strong><small>Workspace Owner</small></span><b>⌄</b></button>
           <div class="user-dropdown" id="setup-user-dropdown" hidden>
-            <div class="user-dropdown-profile">
-              <span class="user-avatar" id="setup-dropdown-avatar">A</span>
-              <div><strong id="setup-dropdown-name">Workspace Admin</strong><small id="setup-user-email"></small></div>
-            </div>
+            <div class="user-dropdown-profile"><span class="user-avatar" id="setup-dropdown-avatar">A</span><div><strong id="setup-dropdown-name">Workspace Admin</strong><small id="setup-user-email"></small></div></div>
             <div class="user-dropdown-divider"></div>
             <a class="dropdown-item" href="workspace.html"><span>⌂</span> Workspace Home</a>
             <button class="dropdown-item danger" id="setup-sign-out-btn"><span>↪</span> Sign out</button>
@@ -35,55 +25,11 @@
         </div>
       </div>
     </header>
-
-    <section class="setup-intro">
-      <div>
-        <div class="setup-kicker">WORKSPACE SETUP</div>
-        <h1>Let's get your workspace ready.</h1>
-        <p>We'll configure the essentials before you start using LabMedSys.</p>
-      </div>
-      <div class="setup-count"><strong id="setup-count-number">1</strong><span>of 6</span></div>
-    </section>
-
-    <section class="setup-progress" aria-label="Workspace setup progress">
-      <div class="setup-progress-track"><span id="setup-progress-bar"></span></div>
-      <div class="setup-progress-steps" id="setup-progress-steps">
-        <span class="active">Welcome</span>
-        <span>Workspace</span>
-        <span>Company</span>
-        <span>Location</span>
-        <span>Review</span>
-        <span>Ready</span>
-      </div>
-    </section>
-
-    <section class="setup-content">
-      <div class="setup-card" id="setup-card">
-        <div class="setup-step-heading">
-          <div class="setup-step-icon" id="setup-step-icon">✓</div>
-          <div>
-            <div class="setup-step-label" id="setup-step-label">STEP 1 · WELCOME</div>
-            <h2 id="setup-step-title">Let's get started.</h2>
-            <p id="setup-step-description">A few essentials are all we need to create your workspace.</p>
-          </div>
-        </div>
-        <div id="step-content"></div>
-        <div id="setup-message" class="setup-message" role="alert"></div>
-        <div class="setup-actions">
-          <button type="button" class="setup-back" id="back-btn">← Back</button>
-          <div class="setup-action-group">
-            <button type="button" class="setup-next secondary-action" id="save-btn" hidden>Save &amp; Continue →</button>
-            <button type="button" class="setup-next" id="next-btn">Continue →</button>
-          </div>
-        </div>
-      </div>
-      <p class="setup-footnote">You can refine your workspace configuration later from Workspace Settings.</p>
-    </section>
-    <footer class="setup-footer">LabMedSys · SaaS Foundation · v1.7.0</footer>
+    <section class="setup-intro"><div><div class="setup-kicker">WORKSPACE SETUP</div><h1>Let's get your workspace ready.</h1><p>We'll configure the essentials before you start using LabMedSys.</p></div><div class="setup-count"><strong id="setup-count-number">1</strong><span>of 5</span></div></section>
+    <section class="setup-progress" aria-label="Workspace setup progress"><div class="setup-progress-track"><span id="setup-progress-bar"></span></div><div class="setup-progress-steps" id="setup-progress-steps"><span class="active">Welcome</span><span>Workspace</span><span>Company</span><span>Location</span><span>Review</span></div></section>
+    <section class="setup-content"><div class="setup-card" id="setup-card"><div class="setup-step-heading"><div class="setup-step-icon" id="setup-step-icon">01</div><div><div class="setup-step-label" id="setup-step-label">STEP 1 · WELCOME</div><h2 id="setup-step-title">Let's get started.</h2><p id="setup-step-description">A few essentials are all we need to create your workspace.</p></div></div><div id="step-content"></div><div id="setup-message" class="setup-message" role="alert"></div><div class="setup-actions"><button type="button" class="setup-back" id="back-btn">← Back</button><div class="setup-action-group"><button type="button" class="setup-next secondary-action" id="save-btn" hidden>Save &amp; Continue →</button><button type="button" class="setup-next" id="next-btn">Continue →</button></div></div></div><p class="setup-footnote">You can refine your workspace configuration later from Workspace Settings.</p></section>
+    <footer class="setup-footer">LabMedSys · SaaS Foundation · v1.8.0</footer>
   </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./app-config.js?v=1.2.0"></script>
-  <script src="./auth-service.js?v=1.3.0"></script>
-  <script src="./workspace-setup.js?v=1.4.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./app-config.js?v=1.2.0"></script><script src="./auth-service.js?v=1.3.0"></script><script src="./workspace-setup.js?v=1.5.0"></script>
 </body>
 </html>
