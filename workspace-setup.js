@@ -72,11 +72,9 @@
 
   async function checkExistingWorkspace() {
     const client = getClient();
-    if (!sessionUser) return false;
-    const {data:members,error}=await client.from('workspace_members').select('workspace_id,status,workspaces!inner(id,status)').eq('user_id',sessionUser.id).eq('status','active').limit(1);
+    const {data:existingId,error}=await client.rpc('get_current_workspace');
     if(error) throw error;
-    const existing=members?.find(m=>m.workspaces?.status==='active');
-    if(existing){workspaceId=existing.workspace_id;return true;}
+    if(existingId){workspaceId=existingId;return true;}
     return false;
   }
 
