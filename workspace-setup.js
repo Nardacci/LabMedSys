@@ -2,18 +2,17 @@
   'use strict';
 
   const steps = [
-    { name: 'Welcome', kicker: 'WORKSPACE SETUP' },
-    { name: 'Workspace', kicker: 'STEP 2 · WORKSPACE' },
-    { name: 'Company', kicker: 'STEP 3 · COMPANY' },
-    { name: 'Location & Preferences', kicker: 'STEP 4 · LOCATION & PREFERENCES' },
-    { name: 'Review', kicker: 'STEP 5 · REVIEW' },
-    { name: 'Ready', kicker: 'STEP 6 · READY' }
+    { name: 'Welcome', kicker: 'STEP 1 · WELCOME', title: "Let's get started.", description: 'A few essentials are all we need to create your workspace.' },
+    { name: 'Workspace', kicker: 'STEP 2 · WORKSPACE', title: 'Name your workspace.', description: 'This is the environment where your LabMedSys operation will live.' },
+    { name: 'Company', kicker: 'STEP 3 · COMPANY', title: 'Tell us about the company.', description: 'Only the minimum information is needed to establish your workspace.' },
+    { name: 'Location', kicker: 'STEP 4 · LOCATION & PREFERENCES', title: 'Set your regional preferences.', description: 'These defaults can be refined later for this workspace.' },
+    { name: 'Review', kicker: 'STEP 5 · REVIEW & CONFIRM', title: 'Review your configuration.', description: 'Everything looks good? Confirm the essentials before saving.' },
+    { name: 'Ready', kicker: 'STEP 6 · READY', title: 'You’re ready to go.', description: 'Your LabMedSys workspace is now configured.' }
   ];
+
   let current = 0;
-  let sessionUser = null;
   let workspaceId = null;
   const revisit = new URLSearchParams(window.location.search).get('revisit') === '1';
-
   const data = {
     workspaceName: '', companyLegalName: '', companyTradeName: '',
     country: 'Brazil', timezone: 'America/Sao_Paulo', locale: 'pt-BR',
@@ -36,23 +35,32 @@
 
   function render() {
     const step = steps[current];
-    $('setup-step-label').textContent = `Step ${current + 1} of ${steps.length}`;
-    $('setup-step-name').textContent = step.name;
+    $('setup-count-number').textContent = current + 1;
     $('setup-progress-bar').style.width = `${((current + 1) / steps.length) * 100}%`;
-    $('step-kicker').textContent = current === 0 && revisit ? 'WORKSPACE SETUP · REVIEW' : step.kicker;
+    $('setup-step-label').textContent = step.kicker;
+    $('setup-step-title').textContent = step.title;
+    $('setup-step-description').textContent = step.description;
+    $('setup-step-icon').textContent = current === 5 ? '✓' : current === 4 ? '✓' : String(current + 1).padStart(2, '0');
     $('back-btn').style.visibility = current === 0 ? 'hidden' : 'visible';
-    $('next-btn').textContent = current === steps.length - 1 ? 'Enter Workspace →' : 'Continue →';
+    $('next-btn').textContent = current === steps.length - 1 ? 'Enter Workspace →' : current === 4 ? (revisit ? 'Save & Continue →' : 'Save & Continue →') : 'Continue →';
+    $('save-btn').hidden = true;
     setMessage('');
 
+    document.querySelectorAll('.setup-progress-steps span').forEach((el, index) => {
+      el.classList.toggle('active', index === current);
+      el.classList.toggle('completed', index < current);
+    });
+
     let html = '';
-    if (current === 0) html = `<div class="setup-welcome-icon">L</div><h1>${revisit ? 'Review your workspace setup.' : 'Let’s set up your workspace.'}</h1><p class="lead">${revisit ? 'Review your current workspace configuration and refine the essentials when needed.' : 'Before you enter LabMedSys, we need a few essentials to create your secure pharmaceutical environment.'}</p><div class="setup-points"><div class="setup-point"><b>01</b><div><b>Workspace identity</b><br><span>Define the environment your team will work in.</span></div></div><div class="setup-point"><b>02</b><div><b>Company foundation</b><br><span>Tell us the minimum legal identity needed to start.</span></div></div><div class="setup-point"><b>03</b><div><b>Preferences</b><br><span>Set language, timezone and regional formats.</span></div></div></div>`;
-    if (current === 1) html = `<h2>Name your workspace.</h2><p class="lead">This is the SaaS environment that will contain your users, companies, configuration and modules.</p><div class="setup-form">${input('workspace-name','Workspace name',data.workspaceName,'e.g. Nardacci Pharma','Choose a clear name for this working environment.')}</div>`;
-    if (current === 2) html = `<h2>Tell us about the company.</h2><p class="lead">Only the minimum information is collected here. The complete company master data will live later in Central de Governança.</p><div class="setup-form">${input('company-legal-name','Legal name',data.companyLegalName,'e.g. Nardacci Indústria Farmacêutica Ltda.','Required to establish the workspace foundation.')}${input('company-trade-name','Trade name',data.companyTradeName,'e.g. Nardacci Pharma','Optional.')}</div>`;
-    if (current === 3) html = `<h2>Set your regional preferences.</h2><p class="lead">These defaults can be refined later. They establish how LabMedSys presents dates, times and language in this workspace.</p><div class="setup-form"><div class="setup-grid-2"><div class="setup-field"><label for="country">Country</label><select id="country"><option value="Brazil">Brazil</option><option value="Germany">Germany</option><option value="Italy">Italy</option><option value="United States">United States</option><option value="Portugal">Portugal</option></select></div><div class="setup-field"><label for="locale">Language</label><select id="locale"><option value="pt-BR">Português (Brasil)</option><option value="en-US">English (US)</option><option value="de-DE">Deutsch</option><option value="it-IT">Italiano</option></select></div></div><div class="setup-grid-2"><div class="setup-field"><label for="timezone">Timezone</label><select id="timezone"><option value="America/Sao_Paulo">São Paulo (UTC−03:00)</option><option value="Europe/Berlin">Berlin (UTC+01:00/+02:00)</option><option value="Europe/Rome">Rome (UTC+01:00/+02:00)</option><option value="America/New_York">New York (UTC−05:00/−04:00)</option></select></div><div class="setup-field"><label for="time-format">Time format</label><select id="time-format"><option value="24h">24-hour</option><option value="12h">12-hour</option></select></div></div><div class="setup-field"><label for="date-format">Date format</label><select id="date-format"><option value="DD/MM/YYYY">DD/MM/YYYY</option><option value="MM/DD/YYYY">MM/DD/YYYY</option><option value="YYYY-MM-DD">YYYY-MM-DD</option></select></div></div>`;
-    if (current === 4) html = `<h2>Review your setup.</h2><p class="lead">Everything below will be used to ${revisit ? 'update' : 'create'} the workspace. You can refine configuration later.</p><div class="setup-review"><div class="review-row"><strong>Workspace</strong><span>${escapeHtml(data.workspaceName)}</span></div><div class="review-row"><strong>Legal name</strong><span>${escapeHtml(data.companyLegalName)}</span></div><div class="review-row"><strong>Trade name</strong><span>${escapeHtml(data.companyTradeName || '—')}</span></div><div class="review-row"><strong>Country</strong><span>${escapeHtml(data.country)}</span></div><div class="review-row"><strong>Language</strong><span>${escapeHtml(data.locale)}</span></div><div class="review-row"><strong>Timezone</strong><span>${escapeHtml(data.timezone)}</span></div><div class="review-row"><strong>Formats</strong><span>${escapeHtml(data.dateFormat)} · ${escapeHtml(data.timeFormat)}</span></div></div>`;
-    if (current === 5) html = `<div class="setup-ready"><div class="ready-badge">✓ Workspace ${revisit ? 'updated' : 'created'} successfully</div><div class="setup-welcome-icon">✓</div><h2>${revisit ? 'Your setup is up to date.' : 'You’re ready to go.'}</h2><p class="lead">Your LabMedSys workspace is now configured. From here, you can manage the environment and start working with the platform modules.</p></div>`;
+    if (current === 0) html = `<div class="setup-welcome"><div class="setup-points"><div class="setup-point"><b>01</b><div><b>Workspace identity</b><br><span>Define the environment your team will work in.</span></div></div><div class="setup-point"><b>02</b><div><b>Company foundation</b><br><span>Tell us the minimum legal identity needed to start.</span></div></div><div class="setup-point"><b>03</b><div><b>Preferences</b><br><span>Set language, timezone and regional formats.</span></div></div></div></div>`;
+    if (current === 1) html = `<div class="setup-form">${input('workspace-name','Workspace name',data.workspaceName,'e.g. Nardacci Pharma','Choose a clear name for this working environment.')}</div>`;
+    if (current === 2) html = `<div class="setup-form">${input('company-legal-name','Legal name',data.companyLegalName,'e.g. Nardacci Indústria Farmacêutica Ltda.','Required to establish the workspace foundation.')}${input('company-trade-name','Trade name',data.companyTradeName,'e.g. Nardacci Pharma','Optional.')}</div>`;
+    if (current === 3) html = `<div class="setup-form"><div class="setup-grid-2"><div class="setup-field"><label for="country">Country</label><select id="country"><option value="Brazil">Brazil</option><option value="Germany">Germany</option><option value="Italy">Italy</option><option value="United States">United States</option><option value="Portugal">Portugal</option></select></div><div class="setup-field"><label for="locale">Language</label><select id="locale"><option value="pt-BR">Português (Brasil)</option><option value="en-US">English (US)</option><option value="de-DE">Deutsch</option><option value="it-IT">Italiano</option></select></div></div><div class="setup-grid-2"><div class="setup-field"><label for="timezone">Timezone</label><select id="timezone"><option value="America/Sao_Paulo">São Paulo (UTC−03:00)</option><option value="Europe/Berlin">Berlin (UTC+01:00/+02:00)</option><option value="Europe/Rome">Rome (UTC+01:00/+02:00)</option><option value="America/New_York">New York (UTC−05:00/−04:00)</option></select></div><div class="setup-field"><label for="time-format">Time format</label><select id="time-format"><option value="24h">24-hour</option><option value="12h">12-hour</option></select></div></div><div class="setup-field"><label for="date-format">Date format</label><select id="date-format"><option value="DD/MM/YYYY">DD/MM/YYYY</option><option value="MM/DD/YYYY">MM/DD/YYYY</option><option value="YYYY-MM-DD">YYYY-MM-DD</option></select></div></div>`;
+    if (current === 4) html = `<div class="setup-review"><button type="button" class="review-row" data-edit="1"><span><strong>Workspace</strong><b>${escapeHtml(data.workspaceName)}</b></span><em>Edit</em></button><button type="button" class="review-row" data-edit="2"><span><strong>Company</strong><b>${escapeHtml(data.companyLegalName)}${data.companyTradeName ? ' · ' + escapeHtml(data.companyTradeName) : ''}</b></span><em>Edit</em></button><button type="button" class="review-row" data-edit="3"><span><strong>Location & Preferences</strong><b>${escapeHtml(data.country)} · ${escapeHtml(data.locale)} · ${escapeHtml(data.timezone)} · ${escapeHtml(data.dateFormat)} · ${escapeHtml(data.timeFormat)}</b></span><em>Edit</em></button><div class="review-note">✓ After confirmation, these settings become the operating foundation of your workspace.</div></div>`;
+    if (current === 5) html = `<div class="setup-ready"><div class="ready-badge">✓ Workspace ${revisit ? 'updated' : 'created'} successfully</div><div class="setup-welcome-icon">✓</div><h3>${revisit ? 'Your setup is up to date.' : 'You’re ready to go.'}</h3><p class="lead">Your LabMedSys workspace is now configured. From here, you can manage the environment and start working with the platform modules.</p></div>`;
     $('step-content').innerHTML = html;
     hydrateStep();
+    document.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => { current = Number(btn.dataset.edit); render(); }));
   }
 
   function hydrateStep() {
@@ -83,16 +91,17 @@
     const client = getClient();
     const {data:setup,error}=await client.rpc('get_current_workspace_setup');
     if(error) throw error;
-    if(!setup) throw new Error('Workspace configuration could not be found.');
-    workspaceId=setup.workspace_id;
-    data.workspaceName=setup.workspace_name||'';
-    data.companyLegalName=setup.company_legal_name||'';
-    data.companyTradeName=setup.company_trade_name||'';
-    data.country=setup.country||'Brazil';
-    data.timezone=setup.timezone||'America/Sao_Paulo';
-    data.locale=setup.locale||'pt-BR';
-    data.dateFormat=setup.date_format||'DD/MM/YYYY';
-    data.timeFormat=setup.time_format||'24h';
+    const row = Array.isArray(setup) ? setup[0] : setup;
+    if(!row) throw new Error('Unable to load the current workspace configuration.');
+    workspaceId=row.workspace_id;
+    data.workspaceName=row.workspace_name||'';
+    data.companyLegalName=row.company_legal_name||'';
+    data.companyTradeName=row.company_trade_name||'';
+    data.country=row.country||'Brazil';
+    data.timezone=row.timezone||'America/Sao_Paulo';
+    data.locale=row.locale||'pt-BR';
+    data.dateFormat=row.date_format||'DD/MM/YYYY';
+    data.timeFormat=row.time_format||'24h';
   }
 
   async function createWorkspace() {
@@ -129,7 +138,6 @@
     try{
       const session=await window.LabMedSysAuth?.getSession?.();
       if(!session?.user){window.location.replace('index.html');return;}
-      sessionUser=session.user;
       const name=session.user.user_metadata?.full_name||session.user.email||'Workspace Admin';
       const initial=name.trim().charAt(0).toUpperCase()||'A';
       $('setup-user-name').textContent=name;
@@ -149,5 +157,7 @@
     }catch(error){console.error('Workspace setup initialization failed:',error);setMessage(error?.message||'Unable to load workspace setup. Please refresh and try again.');}
   }
 
-  document.addEventListener('DOMContentLoaded',()=>{ $('next-btn').addEventListener('click',next); $('back-btn').addEventListener('click',back); init(); });
+  $('next-btn').addEventListener('click',next);
+  $('back-btn').addEventListener('click',back);
+  document.addEventListener('DOMContentLoaded',init);
 })();
