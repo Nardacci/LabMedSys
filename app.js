@@ -1,4 +1,8 @@
-const supabase = window.LABMEDSYS_SUPABASE;
+const SUPABASE_URL = 'https://qasjgklmivxpisqfhngx.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_o6kUCnYclOY9AIlE1qNZAA_EwsFNXCM';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true }
+});
 
 const app = document.querySelector('#app');
 const slugify = v => v.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,50);
@@ -71,5 +75,13 @@ if(location.hash==='#dashboard'){
 if(session){location.hash='dashboard';return}
 renderLogin();
 }
-window.addEventListener('hashchange',route);
-route();
+window.addEventListener('hashchange', () => route().catch(handleRouteError));
+
+function handleRouteError(error){
+  console.error('LabMedSys startup error:', error);
+  if (!app.innerHTML.trim()) renderLogin();
+}
+
+// Render immediately so a transient auth/network error can never produce a blank page.
+if (!location.hash) renderLogin();
+route().catch(handleRouteError);
