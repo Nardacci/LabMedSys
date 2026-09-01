@@ -42,7 +42,7 @@
     $('setup-step-description').textContent = step.description;
     $('setup-step-icon').textContent = current === 5 ? '✓' : current === 4 ? '✓' : String(current + 1).padStart(2, '0');
     $('back-btn').style.visibility = current === 0 ? 'hidden' : 'visible';
-    $('next-btn').textContent = current === steps.length - 1 ? 'Enter Workspace →' : current === 4 ? (revisit ? 'Save & Continue →' : 'Save & Continue →') : 'Continue →';
+    $('next-btn').textContent = current === steps.length - 1 ? 'Enter Workspace →' : 'Continue →';
     $('save-btn').hidden = true;
     setMessage('');
 
@@ -102,6 +102,10 @@
     data.locale=row.locale||'pt-BR';
     data.dateFormat=row.date_format||'DD/MM/YYYY';
     data.timeFormat=row.time_format||'24h';
+
+    // When an existing Workspace is opened from the avatar menu,
+    // resume at Review with the persisted configuration visible.
+    current = 4;
   }
 
   async function createWorkspace() {
