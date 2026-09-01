@@ -51,6 +51,7 @@ function renderLogin() {
 
   document.querySelector('#login-form').addEventListener('submit', (event) => {
     event.preventDefault();
+    location.hash = 'dashboard';
   });
 }
 
@@ -118,7 +119,13 @@ function renderSignup() {
 
   document.querySelector('#signup-form').addEventListener('submit', (event) => {
     event.preventDefault();
+    location.hash = 'dashboard';
   });
+}
+
+function renderDashboard() {
+  app.innerHTML = `<div class="app-shell"><aside class="sidebar"><div class="sidebar-logo"><div class="sidebar-mark">L</div><div>Lab<span>Med</span>Sys</div></div><div class="workspace-switcher"><div class="workspace-avatar">A</div><div><strong>Acme Pharma</strong><span>Workspace</span></div><span class="workspace-more">⌄</span></div><nav class="sidebar-nav"><a class="nav-item active" href="#dashboard"><span>⌘</span>Overview</a><div class="nav-label">WORKSPACE</div><a class="nav-item" href="#dashboard"><span>▦</span>Company</a><a class="nav-item" href="#dashboard"><span>◉</span>Users</a><a class="nav-item" href="#dashboard"><span>◇</span>Access & Roles</a><div class="nav-label">SYSTEM</div><a class="nav-item" href="#dashboard"><span>⚙</span>Settings</a></nav><div class="sidebar-bottom"><div class="user-mini"><div class="user-avatar">A</div><div><strong>Administrator</strong><span>Company Admin</span></div><button id="logout" title="Sign out">↗</button></div></div></aside><main class="dashboard-main"><header class="topbar"><div><div class="page-eyebrow">WORKSPACE</div><h1>Overview</h1></div><div class="topbar-actions"><button class="icon-button">⌕</button><button class="icon-button notification">◌<i></i></button></div></header><section class="dashboard-content"><div class="welcome-card"><div><span class="eyebrow">WELCOME TO LABMEDSYS</span><h2>Your workspace is ready.</h2><p>This is the starting point for your pharmaceutical operations platform. Build your foundation one module at a time.</p></div><div class="welcome-symbol">L</div></div><div class="section-heading"><div><span class="eyebrow">GET STARTED</span><h2>Set up your workspace</h2></div></div><div class="setup-grid"><article class="setup-card"><div class="setup-icon">▦</div><h3>Company profile</h3><p>Configure the essential information for your organization.</p><span>Coming soon</span></article><article class="setup-card"><div class="setup-icon">◉</div><h3>Invite your team</h3><p>Add the people who will operate inside your workspace.</p><span>Coming soon</span></article><article class="setup-card"><div class="setup-icon">◇</div><h3>Access control</h3><p>Define roles and permissions for secure operations.</p><span>Coming soon</span></article></div><div class="empty-state"><div class="empty-icon">□</div><h3>Your operational modules will appear here.</h3><p>We are building the foundation first. The pharmaceutical modules come next.</p></div></section></main></div>`;
+  document.querySelector('#logout').addEventListener('click', () => { location.hash = 'login'; });
 }
 
 function route() {
