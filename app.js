@@ -1,4 +1,4 @@
-const supabase = window.supabase;
+const supabase = window.LABMEDSYS_SUPABASE;
 
 const app = document.querySelector('#app');
 const slugify = v => v.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,50);
