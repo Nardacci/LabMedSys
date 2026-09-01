@@ -67,7 +67,11 @@
     return data.session;
   }
 
+  function getSupabaseClient() {
+    return getClient();
+  }
+
   global.LabMedSysAuth = Object.freeze({
-    signUp, resendSignupConfirmation, signIn, signOut, getSession
+    signUp, resendSignupConfirmation, signIn, signOut, getSession, getSupabaseClient
   });
 })(window);
