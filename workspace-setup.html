@@ -6,7 +6,7 @@
   <meta name="description" content="LabMedSys Workspace Setup">
   <title>LabMedSys · Workspace Setup</title>
   <link rel="stylesheet" href="./style.css?v=1.5.0">
-  <link rel="stylesheet" href="./workspace-setup.css?v=1.1.0">
+  <link rel="stylesheet" href="./workspace-setup.css?v=1.2.0">
 </head>
 <body>
   <main class="setup-shell">
@@ -36,28 +36,54 @@
       </div>
     </header>
 
+    <section class="setup-intro">
+      <div>
+        <div class="setup-kicker">WORKSPACE SETUP</div>
+        <h1>Let's get your workspace ready.</h1>
+        <p>We'll configure the essentials before you start using LabMedSys.</p>
+      </div>
+      <div class="setup-count"><strong id="setup-count-number">1</strong><span>of 6</span></div>
+    </section>
+
     <section class="setup-progress" aria-label="Workspace setup progress">
       <div class="setup-progress-track"><span id="setup-progress-bar"></span></div>
-      <div class="setup-progress-meta"><span id="setup-step-label">Step 1 of 6</span><span id="setup-step-name">Welcome</span></div>
+      <div class="setup-progress-steps" id="setup-progress-steps">
+        <span class="active">Welcome</span>
+        <span>Workspace</span>
+        <span>Company</span>
+        <span>Location</span>
+        <span>Review</span>
+        <span>Ready</span>
+      </div>
     </section>
 
     <section class="setup-content">
       <div class="setup-card" id="setup-card">
-        <div class="setup-kicker" id="step-kicker">WORKSPACE SETUP</div>
+        <div class="setup-step-heading">
+          <div class="setup-step-icon" id="setup-step-icon">✓</div>
+          <div>
+            <div class="setup-step-label" id="setup-step-label">STEP 1 · WELCOME</div>
+            <h2 id="setup-step-title">Let's get started.</h2>
+            <p id="setup-step-description">A few essentials are all we need to create your workspace.</p>
+          </div>
+        </div>
         <div id="step-content"></div>
         <div id="setup-message" class="setup-message" role="alert"></div>
         <div class="setup-actions">
-          <button type="button" class="setup-back" id="back-btn">Back</button>
-          <button type="button" class="setup-next" id="next-btn">Continue <span>→</span></button>
+          <button type="button" class="setup-back" id="back-btn">← Back</button>
+          <div class="setup-action-group">
+            <button type="button" class="setup-next secondary-action" id="save-btn" hidden>Save &amp; Continue →</button>
+            <button type="button" class="setup-next" id="next-btn">Continue →</button>
+          </div>
         </div>
       </div>
       <p class="setup-footnote">You can refine your workspace configuration later from Workspace Settings.</p>
     </section>
-    <footer class="setup-footer">LabMedSys · SaaS Foundation · v1.6.0</footer>
+    <footer class="setup-footer">LabMedSys · SaaS Foundation · v1.7.0</footer>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./app-config.js?v=1.2.0"></script>
   <script src="./auth-service.js?v=1.3.0"></script>
-  <script src="./workspace-setup.js?v=1.3.0"></script>
+  <script src="./workspace-setup.js?v=1.4.0"></script>
 </body>
 </html>
