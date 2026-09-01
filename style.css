@@ -368,22 +368,3 @@ button:hover {
 .welcome-secondary{margin-top:12px;border:0;background:transparent;color:#718096;font-size:13px;cursor:pointer}
 .welcome-panel>.auth-version{text-align:center;margin-top:24px}
 @media(max-width:640px){.welcome-page{padding:16px}.welcome-panel{padding:28px 24px;min-height:620px}.welcome-content h1{font-size:34px}}
-
-.connection-status {
-  margin-top: 16px;
-  font-size: 12px;
-  color: #7b8799;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.connection-status span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #9aa5b5;
-}
-.connection-status.connection-ok { color: #3d7f5c; }
-.connection-status.connection-ok span { background: #31a764; }
-.connection-status.connection-error { color: #b45353; }
-.connection-status.connection-error span { background: #d65c5c; }
