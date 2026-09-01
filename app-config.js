@@ -1,5 +1,5 @@
 window.LABMEDSYS_APP = Object.freeze({
-  version: '1.2.0',
+  version: '1.3.0',
   environment: 'Development environment',
-  cacheVersion: '1.2.0'
+  cacheVersion: '1.3.0'
 });
