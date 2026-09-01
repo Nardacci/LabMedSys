@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LabMedSys Workspace Setup">
+  <title>LabMedSys · Workspace Setup</title>
+  <link rel="stylesheet" href="./style.css?v=1.5.0">
+  <link rel="stylesheet" href="./workspace-setup.css?v=1.0.0">
+</head>
+<body>
+  <main class="setup-shell">
+    <header class="setup-header">
+      <a class="setup-brand" href="index.html" aria-label="LabMedSys home"><span class="setup-mark">L</span><strong>Lab<span>Med</span>Sys</strong></a>
+      <div class="setup-user"><span id="setup-user-avatar">A</span><span id="setup-user-email">Setting up your account</span></div>
+    </header>
+
+    <section class="setup-progress" aria-label="Workspace setup progress">
+      <div class="setup-progress-track"><span id="setup-progress-bar"></span></div>
+      <div class="setup-progress-meta"><span id="setup-step-label">Step 1 of 6</span><span id="setup-step-name">Welcome</span></div>
+    </section>
+
+    <section class="setup-content">
+      <div class="setup-card" id="setup-card">
+        <div class="setup-kicker" id="step-kicker">WORKSPACE SETUP</div>
+        <div id="step-content"></div>
+        <div id="setup-message" class="setup-message" role="alert"></div>
+        <div class="setup-actions">
+          <button type="button" class="setup-back" id="back-btn">Back</button>
+          <button type="button" class="setup-next" id="next-btn">Continue <span>→</span></button>
+        </div>
+      </div>
+      <p class="setup-footnote">You can refine your workspace configuration later from Workspace Settings.</p>
+    </section>
+    <footer class="setup-footer">LabMedSys · SaaS Foundation · v1.6.0</footer>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app-config.js?v=1.2.0"></script>
+  <script src="./auth-service.js?v=1.3.0"></script>
+  <script src="./workspace-setup.js?v=1.0.0"></script>
+</body>
+</html>
