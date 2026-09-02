@@ -55,7 +55,10 @@
     });
 
     document.querySelectorAll('[data-module]').forEach((card) => {
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (event) => {
+        // Implemented module cards are real links and must keep their normal navigation.
+        if (card.tagName === 'A' && card.getAttribute('href')) return;
+
         const moduleName = card.querySelector('h3')?.textContent || 'Module';
         window.alert(moduleName + ' is the next implementation step.');
       });
