@@ -1,0 +1,29 @@
+/* Workspace Administration */
+.workspace-admin-page{min-height:100vh;background:#f6f7fb;color:#263249}
+.workspace-admin-main{width:min(1180px,calc(100% - 56px));margin:0 auto;padding:34px 0 28px}
+.workspace-admin-hero{background:#fff;border:1px solid #e7eaf0;border-radius:18px;padding:28px 30px;margin-bottom:22px}
+.workspace-admin-hero .eyebrow{margin:0;color:#5d67a8}
+.workspace-admin-hero h1{margin:9px 0 7px;font-size:28px;letter-spacing:-.04em;font-weight:650;color:#27354a}
+.workspace-admin-hero p{margin:0;color:#7a8596;font-size:13px;line-height:1.55}
+.workspace-admin-back{display:inline-flex;align-items:center;gap:7px;margin-top:18px;color:#625bc9;text-decoration:none;font-size:12px;font-weight:750}
+.workspace-admin-section-heading{display:flex;align-items:end;justify-content:space-between;margin:0 0 13px}
+.workspace-admin-section-heading .eyebrow{margin:0;color:#8e97a7}
+.workspace-admin-section-heading h2{margin:6px 0 0;font-size:19px;font-weight:650;letter-spacing:-.025em}
+.workspace-admin-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.workspace-admin-card{min-height:158px;background:#fff;border:1px solid #e7eaf0;border-radius:15px;padding:19px;text-decoration:none;color:#263249;display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.workspace-admin-card:hover{transform:translateY(-2px);border-color:#d9d6f3;box-shadow:0 12px 28px rgba(40,48,80,.08)}
+.workspace-admin-card .module-icon{width:36px;height:36px;border-radius:10px;background:#f0effb;color:#625cd0;display:grid;place-items:center;font-size:16px}
+.workspace-admin-card h3{margin:16px 0 6px;font-size:14px}
+.workspace-admin-card p{margin:0;color:#8993a2;font-size:11.5px;line-height:1.5}
+.workspace-admin-card .admin-card-enter{margin-top:auto;padding-top:13px;color:#7168cc;font-size:10px;font-weight:800;letter-spacing:.02em}
+.workspace-admin-card.setup{border-style:dashed;background:#fbfbfe}
+.workspace-admin-footer{padding:12px 20px 22px;text-align:center;color:#a0a8b5;font-size:10px;letter-spacing:.04em}
+@media (max-width:1050px){.workspace-admin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.workspace-admin-main{width:min(100% - 28px,1180px);padding:22px 0}.workspace-admin-hero{padding:22px}.workspace-admin-hero h1{font-size:24px}.workspace-admin-grid{grid-template-columns:1fr}.workspace-admin-card{min-height:142px}}
+
+/* The Workspace home now uses the logo for Home and the avatar for administration. */
+.workspace-home .workspace-admin-nav{display:none}
+.workspace-home .workspace-next{display:none}
+.workspace-home .user-dropdown{min-width:235px}
+.workspace-home .dropdown-item.workspace-admin-link{color:#4d5567}
+.workspace-home .dropdown-item.workspace-admin-link:hover{background:#f5f4fd;color:#5d58c9}
