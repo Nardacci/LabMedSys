@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LabMedSys Workspace Administration">
+  <title>LabMedSys · Workspace Administration</title>
+  <link rel="stylesheet" href="./style.css?v=1.6.0">
+  <link rel="stylesheet" href="./workspace-admin.css?v=1.0.0">
+</head>
+<body>
+  <div class="workspace-admin-page">
+    <header class="workspace-header">
+      <a class="workspace-brand" href="workspace.html" aria-label="Go to Workspace Home">
+        <div class="sidebar-mark">L</div>
+        <strong>Lab<span>Med</span>Sys</strong>
+      </a>
+
+      <div class="workspace-header-actions">
+        <button class="header-icon" aria-label="Notifications">◦</button>
+        <div class="user-menu-wrap">
+          <button class="user-chip" id="user-menu" aria-expanded="false" aria-haspopup="true">
+            <span class="user-avatar">A</span>
+            <span><strong id="workspace-user-name">Workspace Admin</strong><small>Workspace Owner</small></span>
+            <b>⌄</b>
+          </button>
+          <div class="user-dropdown" id="user-dropdown" hidden>
+            <div class="user-dropdown-profile">
+              <span class="user-avatar">A</span>
+              <div><strong id="dropdown-user-name">Workspace Admin</strong><small id="dropdown-user-email"></small></div>
+            </div>
+            <div class="user-dropdown-divider"></div>
+            <a class="dropdown-item" href="workspace-setup.html?revisit=1"><span>⚙</span> Workspace setup</a>
+            <a class="dropdown-item workspace-admin-link" href="workspace-admin.html"><span>🛠</span> Workspace administration</a>
+            <button class="dropdown-item danger" id="sign-out-btn"><span>↪</span> Sign out</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="workspace-admin-main">
+      <section class="workspace-admin-hero">
+        <div class="eyebrow">WORKSPACE ADMINISTRATION</div>
+        <h1>Manage your workspace.</h1>
+        <p>Configure the SaaS environment, access, modules and workspace-level settings.</p>
+        <a class="workspace-admin-back" href="workspace.html">← Back to Workspace Home</a>
+      </section>
+
+      <div class="workspace-admin-section-heading">
+        <div>
+          <div class="eyebrow">CONFIGURATION</div>
+          <h2>Workspace management</h2>
+        </div>
+      </div>
+
+      <section class="workspace-admin-grid" aria-label="Workspace administration options">
+        <a class="workspace-admin-card" href="organization.html">
+          <span class="module-icon">▦</span>
+          <h3>Organization</h3>
+          <p>Manage workspace organization and connected entities.</p>
+          <span class="admin-card-enter">Open →</span>
+        </a>
+        <a class="workspace-admin-card" href="users-access.html">
+          <span class="module-icon">♙</span>
+          <h3>Users &amp; Access</h3>
+          <p>Manage members, workspace roles and access.</p>
+          <span class="admin-card-enter">Open →</span>
+        </a>
+        <a class="workspace-admin-card" href="modules.html">
+          <span class="module-icon">◈</span>
+          <h3>Modules</h3>
+          <p>Control the modules available in this workspace.</p>
+          <span class="admin-card-enter">Open →</span>
+        </a>
+        <a class="workspace-admin-card" href="workspace-settings.html">
+          <span class="module-icon">⚙</span>
+          <h3>Settings</h3>
+          <p>Manage general workspace configuration and preferences.</p>
+          <span class="admin-card-enter">Open →</span>
+        </a>
+        <a class="workspace-admin-card setup" href="workspace-setup.html?revisit=1">
+          <span class="module-icon">✓</span>
+          <h3>Workspace Setup</h3>
+          <p>Review and update the workspace setup information.</p>
+          <span class="admin-card-enter">Review setup →</span>
+        </a>
+      </section>
+    </main>
+
+    <footer class="workspace-admin-footer">LabMedSys · SaaS Foundation · v1.10.0</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./auth-service.js?v=1.3.0"></script>
+  <script src="./workspace.js?v=1.7.0"></script>
+</body>
+</html>
