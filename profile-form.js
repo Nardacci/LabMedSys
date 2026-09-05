@@ -1,0 +1,7 @@
+document.addEventListener('DOMContentLoaded', async()=>{
+ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY), qs=new URLSearchParams(location.search), id=qs.get('id');
+ const form=document.getElementById('profile-form'), msg=document.getElementById('form-message'), title=document.getElementById('page-title'), statusField=document.getElementById('status-field');
+ const setMsg=(t,c='error')=>{msg.textContent=t;msg.className=`governance-form-message ${c}`};
+ if(id){title.textContent='Editar perfil de acesso';statusField.hidden=false;const {data,error}=await sb.rpc('get_workspace_access_profiles');if(error){setMsg(error.message);return}const r=(data||[]).find(x=>x.id===id);if(!r){setMsg('Perfil não encontrado.');return}code.value=r.code;name.value=r.name;description.value=r.description||'';status.value=r.status}
+ form.addEventListener('submit',async e=>{e.preventDefault();setMsg('');const p={p_code:code.value.trim(),p_name:name.value.trim(),p_description:description.value.trim()||null};if(!p.p_code||!p.p_name){setMsg('Informe código e nome do perfil.');return}let res;if(id)res=await sb.rpc('update_workspace_access_profile',{p_id:id,...p,p_status:status.value});else res=await sb.rpc('create_workspace_access_profile',p);if(res.error){setMsg(res.error.message);return}location.href='profiles.html'});
+});
